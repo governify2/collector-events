@@ -1,8 +1,8 @@
-import { body, param, validationResult } from 'express-validator';
-import { ValidationError } from '../utils/customErrors.js';
+const { body, param, validationResult } = require('express-validator');
+const { ValidationError } = require('../utils/customErrors.js');
 
 // Validation middleware for ExampleModel
-export const validateExample = [
+const validateExample = [
   // Validate 'name' field
   body('name')
     .exists({ checkNull: true })
@@ -37,3 +37,5 @@ export const validateExample = [
     }
   },
 ];
+
+module.exports = { validateExample };

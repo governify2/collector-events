@@ -1,12 +1,12 @@
 // server.js
 
-import express from 'express'; // Import Express framework
-import mongoose from 'mongoose'; // Import Mongoose for MongoDB
-import { swaggerSetup } from './swagger.js'; // Import Swagger setup
-import apiRouter from './routes/exampleRoute.js'; // Import API routes
-import dotenv from 'dotenv'; // Import dotenv for environment variables
-import standardizedResponse from './middlewares/standardResponse.js'; // Import custom response middleware
-import { MongoMemoryServer } from 'mongodb-memory-server';
+const express = require('express'); // Import Express framework
+const mongoose = require('mongoose'); // Import Mongoose for MongoDB
+const { swaggerSetup } = require('./swagger.js'); // Import Swagger setup
+const apiRouter = require('./routes/exampleRoute.js'); // Import API routes
+const dotenv = require('dotenv'); // Import dotenv for environment variables
+const standardizedResponse = require('./middlewares/standardResponse.js'); // Import custom response middleware
+const { MongoMemoryServer } = require('mongodb-memory-server');
 
 dotenv.config(); // Load environment variables
 
@@ -33,19 +33,29 @@ let mongoURI =
   process.env.MONGODB_URI || 'mongodb://localhost:27017/microservice';
 if (process.env.NODE_ENV === 'test') {
   const mongod = new MongoMemoryServer(); // Fake MongoDB for testing
-  await mongod.start();
-  mongoURI = mongod.getUri();
-  console.log(mongoURI);
-}
-
-mongoose
-  .connect(mongoURI)
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((error) => {
-    console.error('Error connecting to MongoDB:', error.message);
+  // 'await' no se puede usar en el nivel superior con require, así que usamos promesas
+  mongod.start().then(() => {
+    mongoURI = mongod.getUri();
+    console.log(mongoURI);
+    mongoose
+      .connect(mongoURI)
+      .then(() => {
+        console.log('Connected to MongoDB');
+      })
+      .catch((error) => {
+        console.error('Error connecting to MongoDB:', error.message);
+      });
   });
+} else {
+  mongoose
+    .connect(mongoURI)
+    .then(() => {
+      console.log('Connected to MongoDB');
+    })
+    .catch((error) => {
+      console.error('Error connecting to MongoDB:', error.message);
+    });
+}
 
 // Start server
 app.listen(port, () => {
@@ -55,4 +65,4 @@ app.listen(port, () => {
   );
 });
 
-export default app; // Export the Express application
+module.exports = app; // Export the Express application

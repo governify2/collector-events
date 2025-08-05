@@ -1,5 +1,5 @@
-import exampleService from '../services/exampleService.js';
-import { NotFoundError, ValidationError } from '../utils/customErrors.js';
+const exampleService = require('../services/exampleService.js');
+const { NotFoundError, ValidationError } = require('../utils/customErrors.js');
 
 const removeMongoFields = (data) => {
   if (Array.isArray(data)) {
@@ -13,7 +13,7 @@ const removeMongoFields = (data) => {
   }
 };
 
-export const getAllExamples = async (req, res, next) => {
+const getAllExamples = async (req, res, next) => {
   try {
     const examples = await exampleService.getAllExamples();
     res.sendSuccess(removeMongoFields(examples));
@@ -22,7 +22,7 @@ export const getAllExamples = async (req, res, next) => {
   }
 };
 
-export const createExample = async (req, res, next) => {
+const createExample = async (req, res, next) => {
   try {
     const newExample = await exampleService.createExample(req.body);
     res.sendSuccess(
@@ -43,7 +43,7 @@ export const createExample = async (req, res, next) => {
   }
 };
 
-export const getExampleById = async (req, res, next) => {
+const getExampleById = async (req, res, next) => {
   try {
     const example = await exampleService.getExampleById(req.params.id);
     if (!example) throw new NotFoundError('Example not found');
@@ -53,7 +53,7 @@ export const getExampleById = async (req, res, next) => {
   }
 };
 
-export const updateExample = async (req, res, next) => {
+const updateExample = async (req, res, next) => {
   try {
     let data = req.body;
     // remove _id field from data
@@ -72,7 +72,7 @@ export const updateExample = async (req, res, next) => {
   }
 };
 
-export const deleteExample = async (req, res, next) => {
+const deleteExample = async (req, res, next) => {
   try {
     const deletedExample = await exampleService.deleteExample(req.params.id);
     if (!deletedExample) throw new NotFoundError('Example not found');
@@ -80,4 +80,12 @@ export const deleteExample = async (req, res, next) => {
   } catch (error) {
     res.sendError(error);
   }
+};
+
+module.exports = {
+  getAllExamples,
+  createExample,
+  getExampleById,
+  updateExample,
+  deleteExample,
 };

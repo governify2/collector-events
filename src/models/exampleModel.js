@@ -1,6 +1,6 @@
 // exampleModel.js
 
-import mongoose from 'mongoose'; // Import Mongoose
+const mongoose = require('mongoose'); // Import Mongoose
 
 // Create a schema for Example with validation
 const exampleSchema = new mongoose.Schema({
@@ -20,4 +20,4 @@ const exampleSchema = new mongoose.Schema({
 // Create the model from the schema
 const ExampleModel = mongoose.model('Example', exampleSchema);
 
-export default ExampleModel; // Export the model
+module.exports = ExampleModel; // Export the model

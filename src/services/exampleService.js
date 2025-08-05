@@ -1,7 +1,7 @@
-import ExampleModel from '../models/exampleModel.js';
-import { NotFoundError, BadRequestError } from '../utils/customErrors.js';
+const ExampleModel = require('../models/exampleModel.js');
+const { NotFoundError, BadRequestError } = require('../utils/customErrors.js');
 
-export const getAllExamples = async () => {
+const getAllExamples = async () => {
   try {
     return await ExampleModel.find({});
   } catch (error) {
@@ -9,7 +9,7 @@ export const getAllExamples = async () => {
   }
 };
 
-export const createExample = async (data) => {
+const createExample = async (data) => {
   try {
     const newExample = new ExampleModel(data);
     return await newExample.save();
@@ -18,7 +18,7 @@ export const createExample = async (data) => {
   }
 };
 
-export const getExampleById = async (id) => {
+const getExampleById = async (id) => {
   try {
     const example = await ExampleModel.findById(id);
     if (!example) {
@@ -30,7 +30,7 @@ export const getExampleById = async (id) => {
   }
 };
 
-export const updateExample = async (id, data) => {
+const updateExample = async (id, data) => {
   try {
     const updatedExample = await ExampleModel.findByIdAndUpdate(id, data, {
       new: true,
@@ -45,7 +45,7 @@ export const updateExample = async (id, data) => {
   }
 };
 
-export const deleteExample = async (id) => {
+const deleteExample = async (id) => {
   try {
     const deletedExample = await ExampleModel.findByIdAndDelete(id);
     if (!deletedExample) {
@@ -57,7 +57,7 @@ export const deleteExample = async (id) => {
   }
 };
 
-export default {
+module.exports = {
   getAllExamples,
   createExample,
   getExampleById,

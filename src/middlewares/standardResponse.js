@@ -1,4 +1,4 @@
-import AppError from '../utils/customErrors.js';
+const { AppError } = require('../utils/customErrors.js');
 const standardResponseMiddleware = (req, res, next) => {
   // Custom success response method
   res.sendSuccess = (
@@ -51,4 +51,4 @@ const standardResponseMiddleware = (req, res, next) => {
   next();
 };
 
-export default standardResponseMiddleware;
+module.exports = standardResponseMiddleware;
