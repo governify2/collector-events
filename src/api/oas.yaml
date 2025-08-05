@@ -1,10 +1,14 @@
 openapi: 3.0.0
 info:
-  title: Example API
+  title: Collector-Events API
   version: 1.0.0
-  description: API documentation for Example microservice
-servers:
-  - url: http://localhost:3000/api/v1
+  description: API documentation for Collector-Events microservice
+  contact:
+    name: Javier Fernández-Castillo
+    email: jfernandez26@us.es
+  license:
+    name: MIT
+    url: 'http://opensource.org/licenses/MIT'
 paths:
   /examples:
     get:

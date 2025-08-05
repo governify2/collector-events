@@ -1,47 +1,44 @@
-// Base class for custom application errors
-class AppError extends Error {
-  constructor(
-    message,
-    statusCode = 500,
-    details = null,
-    appCode = 'UNKNOWN_ERROR'
-  ) {
-    super(message);
-    this.statusCode = statusCode;
+const { stdOptions } = require('./standardResponse.js');
+
+class NotFoundError extends Error {
+  constructor(message = 'Resource not found', details) {
+    super('[EXCEPTION]: ' + message);
     this.details = details;
-    this.appCode = appCode; // Add unique application error code for categorization
-
-    // Preserve the stack trace for easier debugging
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, this.constructor);
-    }
+    this.appCode = stdOptions.appCodes.notFound;
+    this.statusCode = stdOptions.codes.notFound;
   }
 }
 
-// Common error examples
-class NotFoundError extends AppError {
-  constructor(message = 'Resource not found', details, appCode = 'NOT_FOUND') {
-    super(message, 404, details, appCode);
+class ValidationError extends Error {
+  constructor(message = 'Validation failed', details) {
+    super('[EXCEPTION]: ' + message);
+    this.details = details;
+    this.appCode = stdOptions.appCodes.validationError;
+    this.statusCode = stdOptions.codes.badRequest;
   }
 }
 
-class BadRequestError extends AppError {
-  constructor(message = 'Bad request', details, appCode = 'BAD_REQUEST') {
-    super(message, 400, details, appCode);
+class UnauthorizedError extends Error {
+  constructor(message = 'Unauthorized', details) {
+    super('[EXCEPTION]: ' + message);
+    this.details = details;
+    this.appCode = stdOptions.appCodes.unauthorized;
+    this.statusCode = stdOptions.codes.unauthorized;
   }
 }
 
-class ValidationError extends AppError {
-  constructor(message = 'Invalid data', details, appCode = 'VALIDATION_ERROR') {
-    // Attach detailed information about validation errors
-    super(message, 400, details, appCode);
+class ForbiddenError extends Error {
+  constructor(message = 'Forbidden', details) {
+    super('[EXCEPTION]: ' + message);
+    this.details = details;
+    this.appCode = stdOptions.appCodes.forbidden;
+    this.statusCode = stdOptions.codes.forbidden;
   }
 }
 
-// Export classes
 module.exports = {
-  AppError,
   NotFoundError,
-  BadRequestError,
   ValidationError,
+  UnauthorizedError,
+  ForbiddenError,
 };
