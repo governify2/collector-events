@@ -9,6 +9,8 @@ info:
   license:
     name: MIT
     url: 'http://opensource.org/licenses/MIT'
+servers:
+  - url: /api
 paths:
   /examples:
     get:
@@ -215,6 +217,88 @@ paths:
                   timestamp:
                     type: string
                     example: '2023-10-01T12:00:00.000Z'
+  /computations:
+    get:
+      summary: Get all current computations
+      tags:
+        - Computation
+      responses:
+        '200':
+          description: A list of computations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Success!
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Computation'
+                  appCode:
+                    type: string
+                    example: OK
+                  timestamp:
+                    type: string
+                    example: '2023-10-01T12:00:00.000Z'
+  /computations/{id}:
+    get:
+      summary: Get a computation by ID
+      tags:
+        - Computation
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the computation to get
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The requested computation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Success!
+                  data:
+                    $ref: '#/components/schemas/Computation'
+                  appCode:
+                    type: string
+                    example: OK
+                  timestamp:
+                    type: string
+                    example: '2023-10-01T12:00:00.000Z'
+        '404':
+          description: Computation not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Computation not found
+                  appCode:
+                    type: string
+                    example: UNKNOWN_ERROR
+                  timestamp:
+                    type: string
+                    example: '2023-10-01T12:00:00.000Z'
 components:
   schemas:
     Example:
@@ -244,3 +328,18 @@ components:
       required:
         - name
         - value
+    Computation:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: '60c72b2f9b1d8f0d8d0b6f9e'
+        name:
+          type: string
+          example: Computation Name
+        result:
+          type: number
+          example: 42
+      required:
+        - name
+        - result
