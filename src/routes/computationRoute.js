@@ -4,6 +4,7 @@ const computationController = require('../controllers/computationController.js')
 const router = express.Router();
 
 router.get('/computations', computationController.getAllCurrentComputations);
+router.delete('/computations', computationController.deleteAllComputations);
 router.post('/computations', computationController.createComputation);
 router.get('/computations/:id', computationController.getComputationById);
 

@@ -11,7 +11,6 @@ const deploy = (expressMiddelWares) => {
       const dotenv = require('dotenv'); // Import dotenv for environment variables
       const standardizedResponse = require('./middlewares/standardResponse.js'); // Import custom response middleware
       const errorHandler = require('./middlewares/errorHandler.js'); // Import error handler middleware
-      var bodyParser = require('body-parser');
       const cors = require('cors');
       const logger = require('governify-commons').getLogger().tag('server');
 
@@ -21,11 +20,6 @@ const deploy = (expressMiddelWares) => {
       const port = config.serverPort; // Define port
 
       app.use(cors());
-      app.use(
-        bodyParser.json({
-          strict: false,
-        })
-      );
 
       // Middlewares
       app.use(express.json()); // Parse JSON bodies

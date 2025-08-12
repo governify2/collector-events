@@ -29,7 +29,7 @@ function getComputationById(computationId) {
       throw error;
     }
   } catch (err) {
-    logger.error('Error getting computation by ID (getComputationById):', err);
+    logger.error(`(getComputationById) Error getting computation by ID with id ${computationId}. ${err.message}`);
     throw err;
   }
 }

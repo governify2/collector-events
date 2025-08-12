@@ -246,6 +246,64 @@ paths:
                   timestamp:
                     type: string
                     example: '2023-10-01T12:00:00.000Z'
+    delete:
+      summary: Delete all computations
+      tags:
+        - Computation
+      responses:
+        '200':
+          description: All computations deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: All computations deleted successfully
+                  data:
+                    type: 'null'
+                  appCode:
+                    type: string
+                    example: OK
+                  timestamp:
+                    type: string
+                    example: '2023-10-01T12:00:00.000Z'
+    post:
+      summary: Create a new computation
+      tags:
+        - Computation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Computation'
+      responses:
+        '201':
+          description: The created computation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Computation created successfully
+                  data:
+                    $ref: '#/components/schemas/Computation'
+                  appCode:
+                    type: string
+                    example: OK
+                  timestamp:
+                    type: string
+                    example: '2023-10-01T12:00:00.000Z'
   /computations/{id}:
     get:
       summary: Get a computation by ID
