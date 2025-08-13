@@ -1,14 +1,16 @@
-const computationService = require('../services/computationService');
 const computationStorage = require('../services/computationStorage');
 const { NotFoundError } = require('../utils/customErrors.js');
 const logger = require('governify-commons').getLogger().tag('computationController');
 
 const createComputation = (req, res, next) => {
   try {
-    logger.info('Creating a new computation');
-    const newComputation = computationStorage.createComputation(req.body);
-    logger.info(`Creating computation with id: ${newComputation.id}`);
-    res.sendSuccess(newComputation, `Computation with id: ${newComputation.id} created successfully`, 201);
+    const options = req.body;
+    const token = req.headers.token;
+    options.api.token = token;
+    logger.info(`Starting computation for ${options.api.name} API at endpoint ${options.api.endpoint}`);
+    const newComputation = computationStorage.createComputation(options);
+    logger.info(`Computation with id: ${newComputation.id} started successfully`);
+    res.sendSuccess(newComputation, `Computation with id: ${newComputation.id} started successfully`, 201);
   } catch (error) {
     next(error);
   }
@@ -18,8 +20,15 @@ const getComputationById = (req, res, next) => {
   try {
     const computationId = req.params.id;
     logger.info(`Getting computation with ID: ${computationId}`);
-    const computation = computationService.getComputationById(computationId);
-    if (!computation) throw new NotFoundError('Computation not found');
+    const computation = computationStorage.getComputationById(computationId);
+    if (!computation) {
+      logger.warn(`No computation found with ID: ${computationId}`);
+      throw new NotFoundError(`No computation with the id ${computationId} was found.`);
+    }
+    if (computation.state === 'In Progress') {
+      logger.info(`Computation with ID: ${computationId} is still in progress`);
+      return res.sendSuccess(computation, `Computation with ID: ${computationId} is still in progress`, 202);
+    }
     logger.info(`Computation with ID: ${computationId} retrieved successfully`);
     res.sendSuccess(computation, `Retrieving computation with id: ${computationId}`);
   } catch (error) {

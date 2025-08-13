@@ -12,211 +12,6 @@ info:
 servers:
   - url: /api
 paths:
-  /examples:
-    get:
-      summary: Get all examples
-      tags:
-        - Example
-      responses:
-        '200':
-          description: A list of examples
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: success
-                  message:
-                    type: string
-                    example: Success!
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Example'
-                  appCode:
-                    type: string
-                    example: OK
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
-    post:
-      summary: Create a new example
-      tags:
-        - Example
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/NewExample'
-      responses:
-        '201':
-          description: The created example
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: success
-                  message:
-                    type: string
-                    example: Example created successfully
-                  data:
-                    $ref: '#/components/schemas/Example'
-                  appCode:
-                    type: string
-                    example: OK
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
-  /examples/{id}:
-    get:
-      summary: Get a specific example by ID
-      tags:
-        - Example
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: ID of the example to get
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The requested example
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: success
-                  message:
-                    type: string
-                    example: Success!
-                  data:
-                    $ref: '#/components/schemas/Example'
-                  appCode:
-                    type: string
-                    example: OK
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
-        '404':
-          description: Example not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: error
-                  message:
-                    type: string
-                    example: Example not found
-                  appCode:
-                    type: string
-                    example: UNKNOWN_ERROR
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
-    put:
-      summary: Update an existing example by ID
-      tags:
-        - Example
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: ID of the example to update
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Example'
-      responses:
-        '200':
-          description: The updated example
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: success
-                  message:
-                    type: string
-                    example: Example updated successfully
-                  data:
-                    $ref: '#/components/schemas/Example'
-                  appCode:
-                    type: string
-                    example: OK
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
-        '404':
-          description: Example not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: error
-                  message:
-                    type: string
-                    example: Example not found
-                  appCode:
-                    type: string
-                    example: UNKNOWN_ERROR
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
-    delete:
-      summary: Delete an example by ID
-      tags:
-        - Example
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: ID of the example to delete
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Successfully deleted
-        '404':
-          description: Example not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: error
-                  message:
-                    type: string
-                    example: Example not found
-                  appCode:
-                    type: string
-                    example: UNKNOWN_ERROR
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
   /computations:
     get:
       summary: Get all current computations
@@ -235,17 +30,16 @@ paths:
                     example: success
                   message:
                     type: string
-                    example: Success!
+                    example: 'Current computations fetched successfully. Total: 0'
                   data:
                     type: array
-                    items:
-                      $ref: '#/components/schemas/Computation'
+                    example: []
                   appCode:
                     type: string
                     example: OK
                   timestamp:
                     type: string
-                    example: '2023-10-01T12:00:00.000Z'
+                    example: '2025-08-13T22:56:33.429Z'
     delete:
       summary: Delete all computations
       tags:
@@ -263,47 +57,40 @@ paths:
                     example: success
                   message:
                     type: string
-                    example: All computations deleted successfully
+                    example: 'All computations deleted successfully. Total deleted: 1'
                   data:
                     type: 'null'
+                    example: null
                   appCode:
                     type: string
                     example: OK
                   timestamp:
                     type: string
-                    example: '2023-10-01T12:00:00.000Z'
+                    example: '2025-08-13T22:55:02.648Z'
     post:
       summary: Create a new computation
       tags:
         - Computation
+      parameters:
+        - in: header
+          name: token
+          required: true
+          description: Token for authentication with external APIs
+          schema:
+            type: string
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Computation'
+              $ref: '#/components/schemas/CreateComputationForm'
       responses:
         '201':
-          description: The created computation
+          description: The created computation (in progress)
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: success
-                  message:
-                    type: string
-                    example: Computation created successfully
-                  data:
-                    $ref: '#/components/schemas/Computation'
-                  appCode:
-                    type: string
-                    example: OK
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
+                $ref: '#/components/schemas/InProgressComputation'
   /computations/{id}:
     get:
       summary: Get a computation by ID
@@ -322,82 +109,199 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: success
-                  message:
-                    type: string
-                    example: Success!
-                  data:
-                    $ref: '#/components/schemas/Computation'
-                  appCode:
-                    type: string
-                    example: OK
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
+                oneOf:
+                  - $ref: '#/components/schemas/CompletedComputation'
+                  - $ref: '#/components/schemas/AbortedComputation'
+        '202':
+          description: Computation is still in progress
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InProgressComputation'
         '404':
           description: Computation not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: error
-                  message:
-                    type: string
-                    example: Computation not found
-                  appCode:
-                    type: string
-                    example: UNKNOWN_ERROR
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
+                $ref: '#/components/schemas/NotFoundComputation'
 components:
   schemas:
-    Example:
+    CreateComputationForm:
       type: object
       properties:
-        _id:
-          type: string
-          example: '60c72b2f9b1d8f0d8d0b6f9e'
-        name:
-          type: string
-          example: Example Name
-        value:
-          type: number
-          example: 123
+        api:
+          type: object
+          properties:
+            name:
+              type: string
+              example: github
+            endpoint:
+              type: string
+              example: https://api.github.com/repos/governify/bluejay-showcase/pulls?state=all
+          required:
+            - name
+            - endpoint
       required:
-        - name
-        - value
-    NewExample:
+        - api
+      example:
+        api:
+          name: github
+          endpoint: https://api.github.com/repos/governify/bluejay-showcase/pulls?state=all
+    InProgressComputation:
       type: object
       properties:
-        name:
+        status:
           type: string
-          example: Example Name
-        value:
-          type: number
-          example: 123
-      required:
-        - name
-        - value
-    Computation:
+          example: success
+        message:
+          type: string
+          example: 'Computation with id: 8b33bba178a142c9 started successfully'
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              example: 8b33bba178a142c9
+            state:
+              type: string
+              example: In Progress
+        appCode:
+          type: string
+          example: OK
+        timestamp:
+          type: string
+          example: '2025-08-13T22:13:06.546Z'
+      example:
+        status: success
+        message: 'Computation with id: 8b33bba178a142c9 started successfully'
+        data:
+          id: 8b33bba178a142c9
+          state: In Progress
+        appCode: OK
+        timestamp: '2025-08-13T22:13:06.546Z'
+    CompletedComputation:
       type: object
       properties:
-        _id:
+        status:
           type: string
-          example: '60c72b2f9b1d8f0d8d0b6f9e'
-        name:
+          example: success
+        message:
           type: string
-          example: Computation Name
-        result:
-          type: number
-          example: 42
-      required:
-        - name
-        - result
+          example: 'Retrieving computation with id: 65cccae28b031340'
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              example: 65cccae28b031340
+            state:
+              type: string
+              example: Completed
+            totalCount:
+              type: integer
+              example: 1
+            computationRequestConfig:
+              type: object
+              properties:
+                api:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: github
+                    endpoint:
+                      type: string
+                      example: https://api.github.com/repos/governify/bluejay-showcase/pulls?state=all
+                  required:
+                    - name
+                    - endpoint
+              required:
+                - api
+            computation:
+              type: array
+              items:
+                type: object
+                properties:
+                  title:
+                    type: string
+                    example: Pull Request Title
+        appCode:
+          type: string
+          example: OK
+        timestamp:
+          type: string
+          example: '2025-08-13T22:14:45.912Z'
+      example:
+        status: success
+        message: 'Retrieving computation with id: 65cccae28b031340'
+        data:
+          id: 65cccae28b031340
+          state: Completed
+          totalCount: 1
+          computationRequestConfig:
+            api:
+              name: github
+              endpoint: https://api.github.com/repos/governify/bluejay-showcase/pulls?state=all
+          computation:
+            - title: Pull Request Title
+        appCode: OK
+        timestamp: '2025-08-13T22:14:45.912Z'
+    AbortedComputation:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: 'Computation with id: 5b664efd8371206d started successfully'
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              example: 5b664efd8371206d
+            state:
+              type: string
+              example: Aborted
+        appCode:
+          type: string
+          example: OK
+        timestamp:
+          type: string
+          example: '2025-08-13T22:23:50.156Z'
+      example:
+        status: success
+        message: 'Computation with id: 5b664efd8371206d started successfully'
+        data:
+          id: 5b664efd8371206d
+          state: Aborted
+        appCode: OK
+        timestamp: '2025-08-13T22:23:50.156Z'
+    NotFoundComputation:
+      type: object
+      properties:
+        status:
+          type: string
+          example: failed
+        message:
+          type: string
+          example: No computation with the id 3484ec9380ec4140 was found.
+        details:
+          type: object
+        appCode:
+          type: string
+          example: NOT_FOUND
+        statusCode:
+          type: integer
+          example: 404
+        timestamp:
+          type: string
+          example: '2025-08-13T22:33:02.468Z'
+      example:
+        status: failed
+        message: 'No computation with this id was found.'
+        details: {}
+        appCode: NOT_FOUND
+        statusCode: 404
+        timestamp: '2025-08-13T22:33:02.468Z'

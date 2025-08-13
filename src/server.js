@@ -6,7 +6,6 @@ const deploy = (expressMiddelWares) => {
       const config = require('./config'); // Import configuration
       const express = require('express'); // Import Express framework
       const { swaggerSetup } = require('./utils/swagger.js'); // Import Swagger setup
-      const apiRouter = require('./routes/exampleRoute.js'); // Import API routes
       const computationRouter = require('./routes/computationRoute.js'); // Import computation routes
       const dotenv = require('dotenv'); // Import dotenv for environment variables
       const standardizedResponse = require('./middlewares/standardResponse.js'); // Import custom response middleware
@@ -31,7 +30,6 @@ const deploy = (expressMiddelWares) => {
       }
 
       // Routes
-      app.use('/api', apiRouter); // Use API routes
       app.use('/api', computationRouter); // Use computation routes
 
       app.get('/', (req, res) => {

@@ -9,7 +9,6 @@ const getAllCurrentComputations = () => {
     return Object.values(results);
   } catch (err) {
     logger.error('Error fetching all current computations:', err);
-    throw err;
   }
 };
 
@@ -20,37 +19,41 @@ const deleteAllComputations = () => {
     return computationsDeleted;
   } catch (err) {
     logger.error('Error deleting all computations:', err);
-    throw err;
   }
 };
 
-const getComputation = (computationID) => {
+const getComputationById = (computationID) => {
   try {
-    const result = results[computationID];
-    if (result !== undefined && result !== null) {
+    result = results[computationID];
+    if (result !== undefined && result !== null && (result.state === 'Completed' || result.state === 'Aborted')) {
       delete results[computationID];
     }
     return result;
   } catch (err) {
     logger.error(`Error getting computation with ID ${computationID}:`, err);
-    throw err;
   }
 };
 
 const createComputation = (options) => {
-  try {
-    const id = crypto.randomBytes(8).toString('hex');
-    const computation = fetcher.fetchComputation(options);
-    results[id] = { id, computation };
-    return results[id];
-  } catch (err) {
-    logger.error('Error creating computation:', err);
-    throw err;
-  }
+  const id = crypto.randomBytes(8).toString('hex');
+  results[id] = { id, state: 'In Progress' };
+  fetcher
+    .fetchComputation(options)
+    .then((data) => {
+      delete options.api.token;
+      results[id] = { id, state: 'Completed', totalCount: data.length, computationRequestConfig: options, computation: data };
+      logger.info(`Computation with id: ${id} completed successfully`);
+    })
+    .catch((err) => {
+      delete options.api.token;
+      results[id] = { id, state: 'Aborted', error: err.message, computationRequestConfig: options };
+      logger.error(`Computation with id: ${id} aborted due to error:`, err);
+    });
+  return results[id];
 };
 
 module.exports = {
-  getComputation,
+  getComputationById,
   getAllCurrentComputations,
   deleteAllComputations,
   createComputation,
