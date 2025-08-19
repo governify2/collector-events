@@ -15,8 +15,10 @@ const deploy = (expressMiddelWares) => {
 
       dotenv.config(); // Load environment variables
 
+      const SERVER_PORT = config.server.serverPort;
+
       const app = express(); // Create an Express application
-      const port = config.serverPort; // Define port
+      const port = SERVER_PORT; // Define port
 
       app.use(cors());
 

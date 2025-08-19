@@ -16,11 +16,11 @@ const createComputation = (req, res, next) => {
   }
 };
 
-const getComputationById = (req, res, next) => {
+const getComputationById = async (req, res, next) => {
   try {
     const computationId = req.params.id;
     logger.info(`Getting computation with ID: ${computationId}`);
-    const computation = computationStorage.getComputationById(computationId);
+    const computation = await computationStorage.getComputationById(computationId);
     if (!computation) {
       logger.warn(`No computation found with ID: ${computationId}`);
       throw new NotFoundError(`No computation with the id ${computationId} was found.`);
@@ -36,10 +36,10 @@ const getComputationById = (req, res, next) => {
   }
 };
 
-const getAllCurrentComputations = (req, res, next) => {
+const getAllCurrentComputations = async (req, res, next) => {
   try {
     logger.info('Getting all current computations');
-    const computations = computationStorage.getAllCurrentComputations();
+    const computations = await computationStorage.getAllCurrentComputations();
     logger.info(`Current computations fetched successfully. Total: ${computations.length}`);
     res.sendSuccess(computations, `Current computations fetched successfully. Total: ${computations.length}`);
   } catch (error) {
@@ -47,12 +47,12 @@ const getAllCurrentComputations = (req, res, next) => {
   }
 };
 
-const deleteAllComputations = (req, res, next) => {
+const deleteAllComputations = async (req, res, next) => {
   try {
     logger.info('Deleting all computations');
-    const computationsDeleted = computationStorage.deleteAllComputations();
-    logger.info(`All computations deleted successfully. Total deleted: ${computationsDeleted}`);
-    res.sendSuccess(null, `All computations deleted successfully. Total deleted: ${computationsDeleted}`);
+    await computationStorage.deleteAllComputations();
+    logger.info(`All computations deleted successfully.`);
+    res.sendSuccess(null, `All computations deleted successfully.`);
   } catch (error) {
     next(error);
   }
