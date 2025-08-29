@@ -21,15 +21,15 @@ const config = {
     keyJira: process.env.KEY_JIRA || null,
   },
   computationStorage: {
-    COMPUTATION_TTL: process.env.COMPUTATION_TTL || 300, // 5 minutes
+    COMPUTATION_TTL: process.env.COMPUTATION_TTL || 300, // 5 minutes in seconds
     inMemory: {
-      INMEMORY_TTL_REFRESH_INTERVAL: process.env.INMEMORY_TTL_REFRESH_INTERVAL || 10000, // 10 seconds
+      INMEMORY_TTL_REFRESH_INTERVAL: process.env.INMEMORY_TTL_REFRESH_INTERVAL || 10000, // 10 seconds in milliseconds
     },
   },
   redis: {
     REDIS_ACTIVATION: process.env.REDIS_ACTIVATION || 'true',
     REDIS_MAX_RETRIES: process.env.REDIS_MAX_RETRIES || 10,
-    REDIS_RETRY_DELAY_MS: process.env.REDIS_RETRY_DELAY_MS || 1000, // 1 second
+    REDIS_RETRY_DELAY_MS: process.env.REDIS_RETRY_DELAY_MS || 1000, // 1 second in milliseconds
   },
 };
 

@@ -6,10 +6,6 @@ const config = require('../config');
 const redisUrl = governify.infrastructure.getServiceURL('internal.database.redis-ec');
 const client = redis.createClient({ url: redisUrl });
 
-const MAX_RETRIES = config.redis.REDIS_MAX_RETRIES;
-const RETRY_DELAY_MS = config.redis.REDIS_RETRY_DELAY_MS;
-const REDIS_ACTIVATION = config.redis.REDIS_ACTIVATION;
-
 // Redis initial connection with retry logic
 let retries = 0;
 let isConnected = false;
@@ -34,25 +30,27 @@ const connectWithRetry = () => {
         logger.error(`Redis client connection error`);
         errorMessageAvailable = false;
       }
-      if (retries < MAX_RETRIES) {
-        setTimeout(connectWithRetry, RETRY_DELAY_MS);
+      if (retries < config.redis.REDIS_MAX_RETRIES) {
+        setTimeout(connectWithRetry, config.redis.REDIS_RETRY_DELAY_MS);
         logger.warn(`Retrying Redis connection with url ${redisUrl}... (attempt ${retries})`);
       } else {
         destroyFlag = true;
         client.destroy();
-        logger.error(`Max Redis connection attempts reached for url ${redisUrl}. In memory store will be used`);
+        logger.error(`Max Redis connection attempts reached for url ${redisUrl}`);
+        logger.info(`In memory store will be used`);
+        config.redis.REDIS_ACTIVATION = 'false';
       }
     });
 };
 
-if (REDIS_ACTIVATION === 'true') {
+if (config.redis.REDIS_ACTIVATION === 'true') {
   connectWithRetry();
 } else {
   logger.info(`Redis activation is disabled. In-memory store will be used.`);
 }
 
 client.on('error', () => {
-  if (REDIS_ACTIVATION === 'true' && reconnectionStrategyAvailable && !destroyFlag) {
+  if (config.redis.REDIS_ACTIVATION === 'true' && reconnectionStrategyAvailable && !destroyFlag) {
     isConnected = false;
     connectWithRetry();
     reconnectionStrategyAvailable = false;
